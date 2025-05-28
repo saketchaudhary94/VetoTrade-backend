@@ -17,11 +17,15 @@ const authRoute = require("./routes/AuthRoute");
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000', 
-  credentials: true              
+    origin: 'http://localhost:3000', 
+    credentials: true              
 }));
-
+  
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(express.json());
+
+app.use("/", authRoute);
 
 // dummy route to add  data to the database 
 // app.get('/addHoldings' , async(req , res)=>{
@@ -215,13 +219,16 @@ app.post('/newOrder' , async(req , res)=>{
     res.send("order saved");
 });
 
-app.listen(PORT , ()=> {
-    console.log("app is listinig to the port PORT");
-    mongoose.connect(url);
-});
-
-app.use(cookieParser());
-
-app.use(express.json());
-
-app.use("/", authRoute);
+mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log(`App is listening on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
