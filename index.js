@@ -17,8 +17,8 @@ const authRoute = require("./routes/AuthRoute");
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000', 
-    credentials: true              
+  origin: ['http://localhost:3000', 'https://velotrade-frontend.netlify.app'],
+  credentials: true
 }));
   
 app.use(bodyParser.json());
